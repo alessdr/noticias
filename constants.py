@@ -1,0 +1,5 @@
+PATH_LOG = 'log/'
+FILE_LOG = 'noticias.log'
+
+ENVIRONMENT_PROD = 'PRD'
+ENVIRONMENT_DEV = 'DEV'
