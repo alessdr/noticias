@@ -1,37 +1,27 @@
 from werkzeug.exceptions import HTTPException
-from flask import Flask, jsonify
+from flask import Flask
 from flask_cors import CORS
-from logger_config import logger
 from dotenv import load_dotenv
 from waitress import serve
-from constants import ENVIRONMENT_PROD
+from api.routes import routes_api
+from constants.constants import ENVIRONMENT_PROD
+from resources.logger_config import logger
 
-import json
 import os
+import json
 
 
-def create_app(config=None):
+def create_app():
     app = Flask(__name__)
 
     # App config
     app.secret_key = os.getenv('SECRET_KEY')
     app.api_key = os.getenv('API_KEY')
 
-    # Set CORS
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    # Definition of the routes
+    app.register_blueprint(routes_api)
 
-    # Definition of the routes. Put them into their own file. See also
-    # Flask Blueprints: http://flask.pocoo.org/docs/latest/blueprints
-    @app.route("/")
-    def hello_world():
-        logger.info("/")
-        return "Hello World"
-
-    @app.route("/api/<some_data>")
-    def foo_url_arg(some_data):
-        logger.info("/foo/%s", some_data)
-        return jsonify({"echo": some_data})
-
+    # Exceptions
     @app.errorhandler(HTTPException)
     def handle_exception(error):
         response = error.get_response()
@@ -43,6 +33,9 @@ def create_app(config=None):
         response.content_type = "application/json"
         logger.exception('%s.', error)
         return response, error.code
+
+    # Set CORS
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     return app
 
@@ -56,6 +49,7 @@ if __name__ == "__main__":
     environment = os.getenv('ENVIRONMENT')
     # Init app
     app = create_app()
+    # Run
     if environment == ENVIRONMENT_PROD:
         threads = os.getenv('THREADS')
         serve(app, host='0.0.0.0', port=port, threads=threads)
