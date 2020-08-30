@@ -1,11 +1,14 @@
 from werkzeug.exceptions import HTTPException
 from flask import Flask
 from flask_cors import CORS
+from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 from waitress import serve
 from api.routes import routes_api
 from constants.constants import ENVIRONMENT_PROD
 from resources.logger_config import logger
+from resources.app_config import config
+from database.db import initialize_db
 
 import os
 import json
@@ -14,12 +17,17 @@ import json
 def create_app():
     app = Flask(__name__)
 
-    # App config
-    app.secret_key = os.getenv('SECRET_KEY')
-    app.api_key = os.getenv('API_KEY')
+    # Config app parameters
+    app = config(app)
 
     # Definition of the routes
     app.register_blueprint(routes_api)
+
+    # Hashing lib
+    bcrypt = Bcrypt(app)
+
+    # Database init
+    initialize_db(app)
 
     # Exceptions
     @app.errorhandler(HTTPException)
