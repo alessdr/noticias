@@ -1,5 +1,5 @@
 from logging.handlers import TimedRotatingFileHandler
-from constants.constants import PATH_LOG, FILE_LOG
+from resources.constants import PATH_LOG, FILE_LOG
 
 import logging
 import os

@@ -6,7 +6,7 @@ from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 from waitress import serve
 from api.routes import initialize_routes
-from constants.constants import ENVIRONMENT_PROD
+from resources.constants import ENVIRONMENT_PROD
 from database.db import initialize_db
 from resources.app_config import config
 from resources.errors import errors
