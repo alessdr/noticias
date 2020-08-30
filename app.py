@@ -2,13 +2,14 @@ from werkzeug.exceptions import HTTPException
 from flask import Flask
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
+from flask_restful import Api
 from dotenv import load_dotenv
 from waitress import serve
-from api.routes import routes_api
+from api.routes import initialize_routes
 from constants.constants import ENVIRONMENT_PROD
+from database.db import initialize_db
 from resources.logger_config import logger
 from resources.app_config import config
-from database.db import initialize_db
 
 import os
 import json
@@ -21,7 +22,8 @@ def create_app():
     app = config(app)
 
     # Definition of the routes
-    app.register_blueprint(routes_api)
+    api = Api(app)
+    initialize_routes(api)
 
     # Hashing lib
     bcrypt = Bcrypt(app)
