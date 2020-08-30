@@ -3,6 +3,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_restful import Api
+from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 from waitress import serve
 from api.routes import initialize_routes
@@ -27,6 +28,9 @@ def create_app():
 
     # Hashing lib
     bcrypt = Bcrypt(app)
+
+    # Auth
+    jwt = JWTManager(app)
 
     # Database init
     initialize_db(app)

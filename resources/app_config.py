@@ -2,8 +2,8 @@ import os
 
 
 def config(app):
+    app.JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
     app.secret_key = os.getenv('SECRET_KEY')
-    app.api_key = os.getenv('API_KEY')
 
     app.config['MONGODB_SETTINGS'] = {
         'host': 'mongodb://' + os.getenv('DB_HOST') + ':' +
