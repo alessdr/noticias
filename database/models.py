@@ -1,13 +1,11 @@
 from flask_bcrypt import generate_password_hash, check_password_hash
 from .db import db
 
-import datetime
-
 
 class News(db.Document):
     title = db.StringField(required=True)
     content = db.StringField(required=True)
-    publish_date = db.DateTimeField(default=datetime.date.today())
+    publish_date = db.DateTimeField(required=True)
 
 
 class User(db.Document):

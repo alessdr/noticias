@@ -35,7 +35,7 @@ def create_app():
     initialize_db(app)
 
     # Set CORS
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    CORS(app)
 
     return app
 
